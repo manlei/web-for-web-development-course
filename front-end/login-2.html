@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>登录课程网站</title>
+	<style type="text/css">
+		form.pos_abs{
+			position:absolute;
+			left:40%;
+			top:35%
+		}
+		h1.position{
+			position: absolute;
+			left:40%;
+		}
+		input.left{
+			position: absolute;
+			left:25%;
+		}
+
+		input.right{
+			position: absolute;
+			right: 20%;		
+		}
+	</style>
+</head>
+<script src="jquery-3.2.1.min.js"></script>
+<script>
+	//
+	function try1(id){
+		id.value="123";
+	}
+	// 跳转页面
+	function goToSignup(){
+		location.href="try.html"
+	}
+	
+	function post(){
+		var postBody = '{"content":"快去把书抄100遍明天就要交不交没分,下面是这本接触著作的链接","href":"1.docx"}';
+		$.ajax({
+			async: true,
+			url: 'http://localhost:3000/homework',
+			type: 'POST',
+			data: JSON.parse(postBody),
+			success:function(response){
+				console.log('success');
+				console.log(response);
+			},
+			error:function(){
+				console.log('error');
+			}
+		});
+	}
+	setTimeout(1,post());
+</script>
+
+<body>
+<h1 id="hello" class="position">web应用课程网站</h1>
+	<form class="pos_abs" name="login.asp" method = "post">
+	
+		账户：<input name = "UserName"></input>
+		<br><br>
+		
+		密码：<input type="password" name="UserPassWord"></input>
+		<br><br>
+		
+		&nbsp;&nbsp;
+		<input type="submit" class="left" value="登录" name="Submit"></input>	
+		
+		&nbsp;&nbsp;
+		<input id = "signup" type="button" class="right" value="注册" name="Signup" onclick="goToSignup()"></input>	
+		
+	</form>
+</body>
+</html>
+
+

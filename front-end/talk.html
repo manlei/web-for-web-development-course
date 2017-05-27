@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>talk</title>
+
+<style>
+	.bodyStyle{
+		background:url(talk.gif);
+		-moz-background-size:cover;
+		-ms-background-size:cover;
+		-webkit-background-size:cover;
+		background-size:cover;
+	}
+	.pHeadMid{
+		color: white;
+		position: relative;
+		left: 40%;
+	}
+	.pButtonRight{
+		position: relative;
+		left: 50%;
+	}
+	.pTalkStyle{
+		position: relative;
+		left: 10%;
+	}
+	.textareaStyle{
+		position: relative;
+		resize: none;
+		width: 100%;
+		height: 80px;
+	}
+</style>
+
+</head>
+<body class="bodyStyle">
+<!-- 标题-->
+<div>
+	<h1 class="pHeadMid">自由言论区</h1>
+</div>
+<!--输入框-->
+<div>
+	<textarea id="talkContent" class="textareaStyle" placeholder="请开始你的表演"></textarea>
+	<br>
+	<br>
+</div>
+<!--按钮-->
+<div>
+<button  class="pButtonRight" onclick="AddTalk()">发言</button>
+	<br>
+	<br>
+	<br>
+	<hr>
+</div>
+
+<!--对话内容 动态生成-->
+
+</body>
+</html>
+
+<script src="cookie.js"></script>
+<script src="jquery-3.2.1.min.js"></script>
+<script>
+	
+	function InitPage(data){
+		for(var i = 0;i < data.length;i++){
+			SetTalk(i,data[i].content);
+		}
+	}
+	
+	//进入该页面自动获取网络数据
+	function GetData(){
+		$.ajax({
+			async: true,
+			url: 'http://localhost:3000/topic',
+			type: 'GET',
+			dataType: 'json',
+			success:function(response){
+				console.log('already success!');
+				console.log(response);
+				//初始化页面
+				InitPage(response);
+			},
+			error:function(){
+				alert("请求数据失败");
+			}
+		})
+	}
+	
+	//设置该方法1毫秒之后执行获取数据
+	setTimeout("GetData()",1);
+	
+	//创建一个div,显示一条言论，参数包括是 言论的内容
+	function SetTalk(num,content){
+		//alert("发言");
+		var div = document.createElement("div");
+		div.id="div"+num;
+		
+		var p=document.createElement("p");
+		p.id="p"+num;
+		var t=document.createTextNode(content);
+		p.appendChild(t);
+		p.setAttribute('class','pTalkStyle');
+		//添加换行
+		var br=document.createElement("br");
+		//添加横线
+		var hr=document.createElement("hr")
+		div.appendChild(p);
+		div.appendChild(br);
+		div.appendChild(hr);
+		document.body.appendChild(div);
+	}
+	
+	//增加一条言论，使用post方法
+	function AddTalk(){
+		//var name=prompt("请输入您的名字","");
+		var content = document.getElementById("talkContent").value;
+		if(content==""){
+			alert("发言内容不能为空");
+			return;
+		}
+		PostTalk(content);
+	}
+
+	function PostTalk(content){
+		var postBody = '{"content":"'+content+'"}';
+		$.ajax({
+			async: true,
+			url: 'http://localhost:3000/topic',
+			type: 'POST',
+			dataType: 'json',
+			data: JSON.parse(postBody),
+			success:function(response){
+				console.log("发送成功！");
+				console.log(response);
+				
+				alert("发言");
+				document.getElementById("talkContent").value = "";
+				console.log(content);
+				SetTalk(1,content);
+
+			},
+			error:function(){
+				console.log("发送失败");
+			},   
+		});
+		
+	}
+</script>
+

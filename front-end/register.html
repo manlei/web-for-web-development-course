@@ -1,0 +1,196 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+
+<style type="text/css">
+		form.pos_abs{
+			position:absolute;
+			left:40%;
+			top:35%
+		}
+		h1.position{
+			position: absolute;
+			left:40%;
+		}
+		button.left{
+			position: absolute;
+			left:  45%;
+		}
+		input.right{
+			position: absolute;
+			right: 20%;		
+		}
+	</style>
+</head>
+<body>
+	<form class="pos_abs" name="login.asp">
+	
+		账户：<input name = "UserName"></input>
+		<br><br>
+		
+		密码：<input type="password" name="UserPassWord"></input>
+		<br><br>
+		
+		<button id="sub" type="button" class="left">注册</input>	
+		
+	</form>
+	
+	
+<script src="jquery-3.2.1.min.js" type="text/javascript"> </script>
+<script>
+	
+	
+	$(document).ready(function(){
+	  $("sub").click(function(){
+		  console.log('debug');
+  		});
+	});
+
+	function handleResponse(data){
+		//alert("world");
+		console.log(data);
+	}
+	
+	function mypost(){
+		var postBody = '{"content":"这是"}';
+		//var postBody = '{"content":"这是南京大学"}';
+		console.log(JSON.parse(postBody));
+		
+		$.ajax({
+                async : true,
+                url : "http://localhost:3000/topic",
+                type : "POST",
+                dataType : "json", // 返回的数据类型，设置为JSONP方式
+                jsonp : 'callback', //指定一个查询参数名称来覆盖默认的 jsonp 回调参数名 callback
+                sonpCallback: 'handleResponse', //设置回调函数名
+                data : JSON.parse(postBody),
+                success: function(response){
+					console.log('post:');
+                    console.log(response);
+                }
+            });
+		
+	}
+	
+	
+	function post(URL, PARAMS) {
+	  var temp = document.createElement("form");
+	  temp.action = URL;
+	  temp.method = "post";
+	  temp.style.display = "none";
+	  for (var x in PARAMS) {
+		var opt = document.createElement("textarea");
+		opt.name = x;
+		opt.value = PARAMS[x];
+		// alert(opt.name)
+		temp.appendChild(opt);
+	  }
+	  document.body.appendChild(temp);
+	  temp.submit();
+	  return temp;
+}
+	
+	function httpPost(url,string){
+	var xml = new XMLHttpRequest();
+	xml.open('POST', url, false);
+	xml.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+	xml.send(string);
+	return xml.responseText;
+}
+	
+function userRegister(id,pw,name,isTeacher){
+	var text = '{"content":"这是南京大学"}';
+	var url="http://localhost:3000/topic";
+	console.log( JSON.stringify(httpPost(url,JSON.parse(text))));
+//	console.log("here");
+//	text.username=id;
+//	text.password=pw;
+//	text.name=name;
+//	text.type=isTeacher;
+//	//console.log( post( 'http://114.215.133.47:8888/user/registeraaa' , text ));
+//	console.log( post( 'http://114.215.133.47:8888/topic/create' , text ));
+}
+
+	
+	var dao;
+	$('#sub').on('click', function(e) {
+		alert("hello");
+		var id = '1';
+		var pw = '12';
+		var name = 'manlei';
+		var isTeacher = true;
+		//userRegister(id,pw,name,isTeacher);
+		mypost();
+//		$.ajax({
+//                async : true,
+//                url : "http://localhost:3000/task",
+//                type : "GET",
+//                dataType : "jsonp", // 返回的数据类型，设置为JSONP方式
+//                jsonp : 'callback', //指定一个查询参数名称来覆盖默认的 jsonp 回调参数名 callback
+////                jsonpCallback: 'handleResponse', //设置回调函数名
+////                data : {
+////                    q : "javascript", 
+////                    count : 1
+////                }, 
+//                success: function(response){
+//                    console.log(response);
+//                }
+//            });
+
+		
+//			
+//			$.ajax('http://114.215.133.47:8888/', {
+//				type: 'GET',
+//				dataType: 'json',
+//				success: function(data) {
+//					for(var i = 0;i <data.length;i++){
+//							console.log(i+":");
+//							console.log(JSON.stringify(data[i]));
+//						
+//						//var str = '{"name":"huangxiaojian","age":"23"}';
+//						//console.log(JSON.parse(str));
+//					}
+//					document.cookie="userId=828"; 
+//					document.cookie="userName=hulk"; 
+//					var strCookie=document.cookie; 
+//					console.log(strCookie.userId); 
+//					//console.log(data);
+//					//console.log(data[1].id);
+////					var t  = JSON.parse(data);
+////					alert(JSON.stringify(t));
+//					dao = data;
+//					console.log('success');
+//					//myget();
+//				},
+//				error: function() {
+//					console.log('err');
+//				}
+//			})
+			
+			
+		})
+	
+	function myget(){
+		console.log(dao);
+		
+		
+//		alert("click");
+//			$.ajax({
+//			url:'http://localhost:3000',
+//			type:'get',
+//			dataType: 'json', 
+//			success:function(){
+//				alert('hghghg');
+//			},	
+//			error: function (xhr, ajaxOptions, thrownError) {
+//			  alert(xhr.status);
+//			  alert(thrownError);
+//			}
+//		});
+	}
+</script>
+	
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>主页面</title>
+<style type="text/css">
+	.bodyStyle{
+		background:url(11.jpg);
+		-moz-background-size:cover;
+		-ms-background-size:cover;
+		-webkit-background-size:cover;
+		background-size:cover;
+	}
+	.divclass{
+		margin: 40px;
+		background:rgba(0,0,0,0.07);
+	}
+	
+	.pWeekStyle{
+		color:rgba(6,5,144,1.00);
+		position: relative;
+		left: 45%;
+	}
+	
+	.pHomeworkStyle{
+		color:black;
+		position: relative;
+		left: 5%;
+	}
+	.aDownloadStyle{
+		color:rgba(6,5,144,1.00);
+		position: relative;
+		left: 5%;
+	}
+	
+	.pHeadMid{
+		position: relative;
+		left: 40%;
+	}
+	
+	.pTalkStyle{
+		color:rgba(6,5,144,1.00);
+		position: relative;
+		left: 88%;
+	}
+	
+	.inDivStyle{
+		display: none;
+		visibility: visible;
+	}
+	
+	</style>
+
+	
+</head>
+
+<script src="jquery-3.2.1.min.js"></script>
+<script>
+//	进入页面 获取初始数据
+	function getData(){
+		$.ajax({
+			async: true,
+			url:'http://localhost:3000/homework',
+			type: 'GET',
+			dataType: 'json',
+			success:function(response){
+				console.log('success');
+				console.log(response);
+				for(var i = 0;i < response.length;i++){
+					console.log(response[i].content);
+					console.log(response[i].href);
+					SetWeekHomeWork(response[i].content,response[i].href);
+				}
+			},
+			error:function(){
+			   console.log('error');
+			}
+		});
+	}
+	setTimeout(1,getData());
+//	点击隐藏作业内容，点击显示作业内容
+	function ShowOrHide(id){
+		//alert(id);
+		var target = document.getElementById(id);
+		//alert(target);
+		if(target.style.display=="none"){
+			target.style.display="";
+		}
+		else{
+			target.style.display="none";
+		}
+	}
+	
+	//计数当前是第几周
+	var week = 0;
+	
+	//生成一个div，显示一周的作业,参数包括作业内容和课件下载链接
+	function SetWeekHomeWork(homeworkContent,href){
+		//找出当前的周数
+		week++;
+		//创建内部div
+		var inDiv=document.createElement("div");
+		inDiv.id="homework"+"p"+week;
+		//inDiv.setAttribute('class','inDivStyle');
+		
+		var homeworkHead=document.createElement("p");
+		homeworkHead.id = 'homeworkHead'+week;
+		homeworkHead.setAttribute('class','pHomeworkStyle');
+		var homeworkHeadvalue=document.createTextNode("作业：");
+		homeworkHead.appendChild(homeworkHeadvalue);
+		
+		//创建p，显示作业内容
+		var homework=document.createElement("p");
+		homework.id="homework"+week;
+		homework.setAttribute('class','pHomeworkStyle');
+		var homeworkvalue=document.createTextNode(homeworkContent);
+		homework.appendChild(homeworkvalue);
+		
+		//创建内部的a ，设置链接
+		var courseWare=document.createElement("a");
+		courseWare.setAttribute('class','aDownloadStyle');
+		var courseWarevalue=document.createTextNode("课件下载");
+		courseWare.href=href;
+		courseWare.appendChild(courseWarevalue);
+		
+		//填充内部的div
+		inDiv.appendChild(homeworkHead);
+		inDiv.appendChild(homework);
+		inDiv.appendChild(courseWare);
+		
+		//生成第几周
+		var weeks=document.createElement("p");
+		weeks.id='p'+week;
+		weeks.setAttribute('class','pWeekStyle');
+		var weeksvalue=document.createTextNode("第"+week+"周");
+		weeks.appendChild(weeksvalue);
+		weeks.onclick=function(){
+			ShowOrHide("homework"+weeks.id)};
+		//weeks.onclick = ShowOrHide(inDiv.id)
+		
+		// 创建外部div
+		var topDiv=document.createElement("div");
+		topDiv.setAttribute('class','divclass');
+		// 填充外部div
+		topDiv.appendChild(weeks);
+		
+		topDiv.appendChild(inDiv);
+		//显示外部div
+		document.body.appendChild(topDiv);
+		
+		//alert("create");
+		
+		//document.getElementById(weeks.id).onclick=function(){
+		//											  ShowOrHide("homework"+"p"+week)
+		//											  };
+	}
+	
+//	function create(){
+//		var content = "Categories: Mandarin terms with audio linksChinese lemmasMandarin lemmasCantonese lemmasHakka lemmasMin Nan lemmasChinese nounsMandarin nounsCantonese nounsHakka nounsMin Nan nounsChinese verbsMandarin verbsCantonese verbsHakka verbsMin Nan verbsChinese ";
+//		var href = "1.docx";
+//		
+//		SetWeekHomeWork(content,href);
+//	}
+	
+</script>
+<body class="bodyStyle">
+<!--标题-->
+	<div>
+		<h1 id="hello" class="pHeadMid">web应用课程网站</h1>
+	</div>
+<!-- 讨论区链接-->
+	<div class="divclass">
+		<a id="talk" class="pTalkStyle" href="talk.html">讨论区</a>
+	</div>
+
+<!--设置每一周的具体内容-->
+<!--
+	<div class="divclass">
+		<p id="one" class="pWeekStyle" onclick="ShowOrHide('homework'+this.id)">第一周</p>
+		
+		<div id="homeworkone">
+			<p class="pHomeworkStyle">作业：</p>
+				<p class="pHomeworkStyle">Categories: Mandarin terms with audio linksChinese lemmasMandarin lemmasCantonese lemmasHakka lemmasMin Nan lemmasChinese nounsMandarin nounsCantonese nounsHakka nounsMin Nan nounsChinese verbsMandarin verbsCantonese verbsHakka verbsMin Nan verbsChinese terms with IPA pronunciationBeginning MandarinJapanese terms spelled with 作 read as さJapanese terms spelled with 業 read as ぎょうJapanese terms read with on'yomiJapanese lemmasJ</p>
+				<a class="aDownloadStyle" href="1.docx">课件下载</a>
+		</div>
+	</div>
+	
+	
+	<div id="two" class="divclass" onclick="AddElement(this)">
+		<p class="pWeekStyle">第二周</p>
+		
+	</div>
+	
+	<div class="divclass" onclick="create()">
+		<p class="pWeekStyle">第三周</p>
+		
+	</div>
+-->
+	
+</body>
+</html>
